@@ -4,17 +4,18 @@ import Button from "../components/buttons/button";
 import { MdDelete, MdVisibility } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function Wishlist() {
   let PkgDataFromLocal = JSON.parse(localStorage.getItem("fav"));
   const [localData, setLocalData] = useState(PkgDataFromLocal);
+  const selector = useSelector((state) => state.packages.packages);
   const navigate = useNavigate();
 
   function handleDelete(id) {
     const dataAfterDel = localData.filter((item) => item.id !== id);
     setLocalData(dataAfterDel);
     localStorage.setItem("fav", JSON.stringify(dataAfterDel));
-    // console.log(dataAfterDel);
   }
 
   function HandleAddPackage() {
@@ -31,11 +32,11 @@ export default function Wishlist() {
         }}
       >
         <h3>Welcome to Favourite NPM Packages</h3>
-        {localData.length != 0 && (
+        {selector.length != 0 && (
           <Button name="Add Fav" onClick={HandleAddPackage} />
         )}
       </div>
-      {localData.length !== 0 ? (
+      {selector.length !== 0 ? (
         <table>
           <thead>
             <tr>
@@ -72,7 +73,7 @@ export default function Wishlist() {
 function NoPackages({ onClick }) {
   return (
     <div id={style.emptyBox}>
-      <div classname={style.baseFont}>
+      <div className={style.baseFont}>
         You don't have any favs yet. Please add.
       </div>
       <Button name="Add Fav" onClick={onClick} />
